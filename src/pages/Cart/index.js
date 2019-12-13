@@ -1,17 +1,32 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   MdRemoveCircleOutline,
   MdAddCircleOutline,
   MdDelete
 } from 'react-icons/md';
 
+import { formatPrice } from '../../util/format';
+
 import * as CartActions from '../../store/modules/cart/actions';
 
 import { Container, ProductTable, Total } from './styles';
 
 export default function Cart() {
-  const cart = useSelector(state => state.cart);
+  const cart = useSelector(state =>
+    state.cart.map(product => ({
+      ...product,
+      subTotal: formatPrice(product.price * product.amount)
+    }))
+  );
+  const total = useSelector(state =>
+    formatPrice(
+      state.cart.reduce((result, product) => {
+        return result + product.price * product.amount;
+      }, 0)
+    )
+  );
 
   const dispatch = useDispatch();
 
@@ -57,7 +72,7 @@ export default function Cart() {
                 </div>
               </td>
               <td>
-                <strong>R$258,00</strong>
+                <strong>{product.subTotal}</strong>
               </td>
               <td>
                 <button
@@ -79,9 +94,15 @@ export default function Cart() {
 
         <Total>
           <span>TOTAL</span>
-          <strong>R$129,34</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>
   );
 }
+
+Cart.propTypes = {
+  cart: PropTypes.shape({
+    map: PropTypes.func
+  }).isRequired
+};
