@@ -1,107 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { MdAddShoppingCart } from 'react-icons/md';
+import { formatPrice } from '../../util/format';
+import api from '../../services/api';
 
 import { ProductList } from './styles';
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+
+  const dispatch = useDispatch();
+
+  async function loadProducts() {
+    const response = await api.get('/products');
+
+    const data = response.data.map(product => ({
+      ...product,
+      priceFormatted: formatPrice(product.price)
+    }));
+
+    setProducts(data);
+  }
+
+  function handleAddProduct(product) {
+    dispatch({
+      type: 'ADD_TO_CART',
+      product
+    });
+  }
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
   return (
     <ProductList>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-vr-sneaker-meia-leve/06/E74-0492-006/E74-0492-006_zoom1.jpg"
-          alt="Tênis"
-        />
-        <strong>Tenis muito legal</strong>
-        <span>R$ 129,90</span>
+      {products.map(product => (
+        <li key={product.id}>
+          <img src={product.image} alt={product.title} />
+          <strong>{product.title}</strong>
+          <span>{product.priceFormatted}</span>
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
+          <button type="button" onClick={() => handleAddProduct(product)}>
+            <div>
+              <MdAddShoppingCart size={16} color="#fff" /> 3
+            </div>
 
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-vr-sneaker-meia-leve/06/E74-0492-006/E74-0492-006_zoom1.jpg"
-          alt="Tênis"
-        />
-        <strong>Tenis muito legal</strong>
-        <span>R$ 129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-vr-sneaker-meia-leve/06/E74-0492-006/E74-0492-006_zoom1.jpg"
-          alt="Tênis"
-        />
-        <strong>Tenis muito legal</strong>
-        <span>R$ 129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-vr-sneaker-meia-leve/06/E74-0492-006/E74-0492-006_zoom1.jpg"
-          alt="Tênis"
-        />
-        <strong>Tenis muito legal</strong>
-        <span>R$ 129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-vr-sneaker-meia-leve/06/E74-0492-006/E74-0492-006_zoom1.jpg"
-          alt="Tênis"
-        />
-        <strong>Tenis muito legal</strong>
-        <span>R$ 129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-vr-sneaker-meia-leve/06/E74-0492-006/E74-0492-006_zoom1.jpg"
-          alt="Tênis"
-        />
-        <strong>Tenis muito legal</strong>
-        <span>R$ 129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
+            <span>Adicionar ao carrinho</span>
+          </button>
+        </li>
+      ))}
     </ProductList>
   );
 }
