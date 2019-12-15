@@ -31,11 +31,11 @@ export default function Cart() {
   const dispatch = useDispatch();
 
   function increment(product) {
-    dispatch(CartActions.updateAmount(product.id, product.amount + 1));
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount + 1));
   }
 
   function decrement(product) {
-    dispatch(CartActions.updateAmount(product.id, product.amount - 1));
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount - 1));
   }
 
   return (
