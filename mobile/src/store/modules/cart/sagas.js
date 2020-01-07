@@ -21,6 +21,7 @@ function* addToCart({ payload }) {
     const data = {
       ...response.data,
       amount: 1,
+      subtotal: formatPrice(response.data.price * amount),
       priceFormatted: formatPrice(response.data.price),
     };
 

@@ -20,6 +20,7 @@ export const Logo = styled.Image.attrs({
   source: logo,
   resizeMode: 'cover',
 })`
+  opacity: 0;
   width: 185px;
   height: 24px;
 `;
