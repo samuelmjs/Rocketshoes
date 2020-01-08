@@ -3,7 +3,7 @@ import color from '../../styles/colors';
 
 export const Container = styled.View`
   flex: 1;
-  background: ${color.dark};
+  background: ${color.default};
   padding: 20px;
 `;
 
@@ -105,4 +105,14 @@ export const OrderText = styled.Text`
   color: #fff;
   font-weight: bold;
   font-size: 16px;
+`;
+
+export const WithoutProductsContainer = styled.View`
+  padding: 15px;
+`;
+
+export const WithoutProductsText = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
 `;

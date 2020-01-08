@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { updateAmountSuccess, addToCartSuccess } from './actions';
 import NavigationService from '../../../services/navigation';
@@ -10,8 +11,16 @@ function* addToCart({ payload }) {
     state.cart.find(product => product.id === payload.id)
   );
 
+  const stock = yield call(api.get, `/stock/${payload.id}`);
+
+  const stockAmount = stock.data.amount;
   const currentAmount = productExists ? productExists.amount : 0;
   const amount = currentAmount + 1;
+
+  if (amount > stockAmount) {
+    Alert.alert('Quantidade solicitada fora de estoque');
+    return;
+  }
 
   if (productExists) {
     yield put(updateAmountSuccess(productExists.id, amount));
@@ -21,8 +30,6 @@ function* addToCart({ payload }) {
     const data = {
       ...response.data,
       amount: 1,
-      subtotal: formatPrice(response.data.price * amount),
-      priceFormatted: formatPrice(response.data.price),
     };
 
     yield put(addToCartSuccess(data));
@@ -30,4 +37,19 @@ function* addToCart({ payload }) {
   }
 }
 
-export default all([takeLatest('@cart/ADD_REQUEST', addToCart)]);
+function* updateAmount({ payload }) {
+  if (payload.amount <= 0) return;
+
+  const stock = yield call(api.get, `/stock/${payload.id}`);
+
+  const stockAmount = stock.data.amount;
+
+  if (payload.amount > stockAmount) return;
+
+  yield put(updateAmountSuccess(payload.id, payload.amount));
+}
+
+export default all([
+  takeLatest('@cart/ADD_REQUEST', addToCart),
+  takeLatest('@cart/UPDATE_AMOUNT_REQUEST', updateAmount),
+]);
