@@ -22,7 +22,9 @@ export const ProductImage = styled.Image`
   width: 200px;
 `;
 
-export const ProductTitle = styled.Text`
+export const ProductTitle = styled.Text.attrs({
+  numberOfLines: 2,
+})`
   font-size: 16px;
 `;
 

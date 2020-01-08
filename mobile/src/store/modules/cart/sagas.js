@@ -2,7 +2,6 @@ import { Alert } from 'react-native';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { updateAmountSuccess, addToCartSuccess } from './actions';
 import NavigationService from '../../../services/navigation';
-import { formatPrice } from '../../../util/format';
 
 import api from '../../../services/api';
 

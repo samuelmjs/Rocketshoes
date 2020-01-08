@@ -25,7 +25,7 @@ export const Logo = styled.Image.attrs({
   height: 24px;
 `;
 
-export const BasketContainer = styled.View`
+export const BasketContainer = styled.TouchableOpacity`
   height: 24px;
   width: 24px;
   flex: 1;

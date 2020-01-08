@@ -9,15 +9,15 @@ import { Wrapper, Container, Logo, BasketContainer, ItemCount } from './styles';
 export default function Header({ navigation }) {
   const cartSize = useSelector(state => state.cart.length);
 
-  function handleNavigate() {
-    navigation.navigate('main');
+  function handleNavigate(page) {
+    navigation.navigate(page);
   }
 
   return (
     <Wrapper>
-      <Container onPress={handleNavigate}>
+      <Container>
         <Logo />
-        <BasketContainer>
+        <BasketContainer onPress={() => handleNavigate('Cart')}>
           <Icon name="shopping-basket" color="#fff" size={25} />
           <ItemCount>{cartSize || 0}</ItemCount>
         </BasketContainer>

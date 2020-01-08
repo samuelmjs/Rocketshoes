@@ -90,5 +90,9 @@ Main.propTypes = {
     image: PropTypes.string,
     title: PropTypes.string,
     priceFormatted: PropTypes.string,
-  }).isRequired,
+  }),
+};
+
+Main.defaultProps = {
+  item: {},
 };
